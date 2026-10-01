@@ -1,12 +1,12 @@
 # ChatSock
 
-ChatSock is a client-side Fabric mod for Minecraft 26.1. It sends each line received over a local TCP socket as a chat message from the connected player and forwards incoming player chat and game messages back over that connection.
+ChatSock is a client-side Fabric mod for Minecraft 26.1. It sends each line received over a local TCP socket as a chat message from the connected player and forwards incoming player chat back over that connection.
 
 ## Use
 
 Start Minecraft with the mod installed and join a world or server. The socket listener binds to the loopback interface on port `25576`; set the JVM system property `-Dchatsock.port=PORT` to use another port.
 
-Connect to `127.0.0.1:25576` and send UTF-8 text followed by a newline. Each non-empty line is sent as one chat message. Messages longer than 256 characters are ignored. Incoming player chat and game messages are sent to the connected client as UTF-8 text followed by a newline; embedded line breaks are replaced with spaces. The listener accepts one connection at a time and accepts another after the current connection closes.
+Connect to `127.0.0.1:25576` and send UTF-8 text followed by a newline. Each non-empty line is sent as one chat message. Messages longer than 256 characters are ignored. Incoming player chat is sent to the connected client as UTF-8 text followed by a newline; embedded line breaks are replaced with spaces. The listener accepts one connection at a time and accepts another after the current connection closes.
 
 For example, this Python snippet sends one message:
 
