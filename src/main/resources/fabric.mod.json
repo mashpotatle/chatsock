@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "chatsock",
+	"version": "${version}",
+	"name": "ChatSock",
+	"description": "Sends chat messages received over a local TCP socket.",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/chatsock/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"name.modid.Chatsock"
+		],
+		"client": [
+			"name.modid.client.ChatsockClient"
+		],
+		"fabric-datagen": [
+			"name.modid.client.ChatsockDataGenerator"
+		]
+	},
+	"mixins": [
+		"chatsock.mixins.json",
+		{
+			"config": "chatsock.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
