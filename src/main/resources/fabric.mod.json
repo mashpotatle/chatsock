@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
-	"id": "chatsock",
+	"id": "sockchat",
 	"version": "${version}",
-	"name": "ChatSock",
+	"name": "SockChat",
 	"description": "Sends chat messages received over a local TCP socket.",
 	"authors": [
 		"Me!"
@@ -12,23 +12,23 @@
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/chatsock/icon.png",
+	"icon": "assets/sockchat/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"name.modid.Chatsock"
+			"name.modid.Sockchat"
 		],
 		"client": [
-			"name.modid.client.ChatsockClient"
+			"name.modid.client.SockchatClient"
 		],
 		"fabric-datagen": [
-			"name.modid.client.ChatsockDataGenerator"
+			"name.modid.client.SockchatDataGenerator"
 		]
 	},
 	"mixins": [
-		"chatsock.mixins.json",
+		"sockchat.mixins.json",
 		{
-			"config": "chatsock.client.mixins.json",
+			"config": "sockchat.client.mixins.json",
 			"environment": "client"
 		}
 	],

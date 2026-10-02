@@ -2,9 +2,9 @@ package name.modid.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import name.modid.Chatsock;
+import name.modid.Sockchat;
 
-public class ChatsockClient implements ClientModInitializer {
+public class SockchatClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ClientReceiveMessageEvents.CHAT.register((message, signedMessage, profile, chatType, receptionTimestamp) ->
@@ -15,6 +15,6 @@ public class ChatsockClient implements ClientModInitializer {
 			}
 		});
 		ChatSocketServer.start();
-		Chatsock.LOGGER.info("Chat socket listener initialized");
+		Sockchat.LOGGER.info("Chat socket listener initialized");
 	}
 }

@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 import net.minecraft.client.Minecraft;
-import name.modid.Chatsock;
+import name.modid.Sockchat;
 
 final class ChatSocketServer {
 	private static final int DEFAULT_PORT = 25576;
@@ -26,13 +26,13 @@ final class ChatSocketServer {
 
 	static void start() {
 		int port = getPort();
-		Thread listener = new Thread(() -> listen(port), "chatsock-socket-listener");
+		Thread listener = new Thread(() -> listen(port), "sockchat-socket-listener");
 		listener.setDaemon(true);
 		listener.start();
 	}
 
 	private static int getPort() {
-		String configuredPort = System.getProperty("chatsock.port");
+		String configuredPort = System.getProperty("sockchat.port");
 		if (configuredPort == null) {
 			return DEFAULT_PORT;
 		}
@@ -45,14 +45,14 @@ final class ChatSocketServer {
 		} catch (NumberFormatException ignored) {
 		}
 
-		Chatsock.LOGGER.warn("Invalid chatsock.port '{}'; using {}", configuredPort, DEFAULT_PORT);
+		Sockchat.LOGGER.warn("Invalid sockchat.port '{}'; using {}", configuredPort, DEFAULT_PORT);
 		return DEFAULT_PORT;
 	}
 
 	private static void listen(int port) {
 		try (ServerSocket server = new ServerSocket()) {
 			server.bind(new InetSocketAddress(InetAddress.getLoopbackAddress(), port));
-			Chatsock.LOGGER.info("Chat socket listening on {}:{}", server.getInetAddress().getHostAddress(), port);
+			Sockchat.LOGGER.info("Chat socket listening on {}:{}", server.getInetAddress().getHostAddress(), port);
 
 			while (!Thread.currentThread().isInterrupted()) {
 				try (Socket client = server.accept()) {
@@ -63,11 +63,11 @@ final class ChatSocketServer {
 						clearActiveClient(client);
 					}
 				} catch (IOException exception) {
-					Chatsock.LOGGER.warn("Chat socket client disconnected with an error", exception);
+						Sockchat.LOGGER.warn("Chat socket client disconnected with an error", exception);
 				}
 			}
 		} catch (IOException exception) {
-			Chatsock.LOGGER.error("Could not start chat socket listener on port {}", port, exception);
+			Sockchat.LOGGER.error("Could not start chat socket listener on port {}", port, exception);
 		}
 	}
 
@@ -76,7 +76,7 @@ final class ChatSocketServer {
 			activeClient = client;
 			activeWriter = new BufferedWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8));
 		}
-		Chatsock.LOGGER.info("Chat socket client connected");
+		Sockchat.LOGGER.info("Chat socket client connected");
 	}
 
 	private static void clearActiveClient(Socket client) {
@@ -86,7 +86,7 @@ final class ChatSocketServer {
 				activeWriter = null;
 			}
 		}
-		Chatsock.LOGGER.info("Chat socket client disconnected");
+			Sockchat.LOGGER.info("Chat socket client disconnected");
 	}
 
 	static void broadcast(String message) {
@@ -101,11 +101,11 @@ final class ChatSocketServer {
 				activeWriter.newLine();
 				activeWriter.flush();
 			} catch (IOException exception) {
-				Chatsock.LOGGER.warn("Could not send chat message to socket client", exception);
+					Sockchat.LOGGER.warn("Could not send chat message to socket client", exception);
 				try {
 					activeClient.close();
 				} catch (IOException closeException) {
-					Chatsock.LOGGER.debug("Could not close disconnected chat socket client", closeException);
+						Sockchat.LOGGER.debug("Could not close disconnected chat socket client", closeException);
 				}
 				activeClient = null;
 				activeWriter = null;
@@ -121,7 +121,7 @@ final class ChatSocketServer {
 				continue;
 			}
 			if (message.length() > MAX_MESSAGE_LENGTH) {
-				Chatsock.LOGGER.warn("Ignoring chat socket message longer than {} characters", MAX_MESSAGE_LENGTH);
+			Sockchat.LOGGER.warn("Ignoring chat socket message longer than {} characters", MAX_MESSAGE_LENGTH);
 				continue;
 			}
 
@@ -129,7 +129,7 @@ final class ChatSocketServer {
 			Minecraft.getInstance().execute(() -> {
 				Minecraft minecraft = Minecraft.getInstance();
 				if (minecraft.player == null) {
-					Chatsock.LOGGER.warn("Ignoring chat socket message because the player is not in a world");
+					Sockchat.LOGGER.warn("Ignoring chat socket message because the player is not in a world");
 					return;
 				}
 				minecraft.player.connection.sendChat(chatMessage);
